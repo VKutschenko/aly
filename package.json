@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build",
+		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "eslint .",
 		"setup": "npx prisma migrate dev -n initial-setup && npx prisma db seed"
