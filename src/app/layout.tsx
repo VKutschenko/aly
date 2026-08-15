@@ -32,18 +32,11 @@ export default function RootLayout({
 				<ClerkProvider
 					afterSignOutUrl="/"
 					appearance={{
-						variables: { colorPrimary: "#000000" },
+						// Clerk v7 renders dark when the app is in dark mode, so light-only
+						// element overrides (white card/buttons) would hide its light text.
+						variables: { colorPrimary: "#6366f1" },
 						elements: {
-							formButtonPrimary:
-								"bg-black border border-black border-solid hover:bg-white hover:text-black",
-							socialButtonsBlockButton:
-								"bg-white border-gray-200 hover:bg-transparent hover:border-black text-gray-600 hover:text-black",
 							socialButtonsBlockButtonText: "font-semibold",
-							formButtonReset:
-								"bg-white border border-solid border-gray-200 hover:bg-transparent hover:border-black text-gray-500 hover:text-black",
-							membersPageInviteButton:
-								"bg-black border border-black border-solid hover:bg-white hover:text-black",
-							card: "bg-[#fafafa]",
 						},
 					}}
 				>
