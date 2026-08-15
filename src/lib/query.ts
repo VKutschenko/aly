@@ -8,7 +8,7 @@ export async function initProfile() {
 	noStore();
 	const user = await currentUser();
 
-	if (!user) return auth().redirectToSignIn();
+	if (!user) return (await auth()).redirectToSignIn();
 
 	const profile = await prisma.profile.findUnique({
 		where: {
@@ -38,7 +38,7 @@ export async function initProfile() {
 
 export async function getCurrentProfile() {
 	const user = await currentUser();
-	if (!user) return auth().redirectToSignIn();
+	if (!user) return (await auth()).redirectToSignIn();
 
 	const profile = await prisma.profile.findUnique({
 		where: {
@@ -49,8 +49,8 @@ export async function getCurrentProfile() {
 }
 
 export async function getCurrentProfilePage(req: NextApiRequest) {
-	const authInfo = await getAuth(req);
-	if (!authInfo.sessionId) return auth().redirectToSignIn();
+	const authInfo = getAuth(req);
+	if (!authInfo.sessionId) return null;
 
 	const profile = await prisma.profile.findUnique({
 		where: {

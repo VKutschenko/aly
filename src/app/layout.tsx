@@ -30,6 +30,7 @@ export default function RootLayout({
 		<html lang="en" className="scroll-smooth" suppressHydrationWarning>
 			<body className={cn(open_sans.className, "bg-white dark:bg-[#313338]")}>
 				<ClerkProvider
+					afterSignOutUrl="/"
 					appearance={{
 						variables: { colorPrimary: "#000000" },
 						elements: {

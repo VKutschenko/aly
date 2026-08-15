@@ -5,8 +5,9 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
 
-export async function PATCH(req: Request, { params }: { params: { memberId: string } }) {
-	try {
+export async function PATCH(req: Request, props: { params: Promise<{ memberId: string }> }) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
         const {searchParams} = new URL(req.url);
         const {role} = await req.json();
@@ -59,8 +60,9 @@ export async function PATCH(req: Request, { params }: { params: { memberId: stri
 		return new NextResponse("Internal Error", { status: 500 });
 	}
 }
-export async function DELETE(req: Request, { params }: { params: { memberId: string } }) {
-	try {
+export async function DELETE(req: Request, props: { params: Promise<{ memberId: string }> }) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
         const {searchParams} = new URL(req.url);
         const serverId = searchParams.get("serverId");

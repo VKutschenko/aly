@@ -25,7 +25,6 @@ export default async function Home() {
 							</div>
 							<div className="flex items-center gap-2">
 								<UserButton
-									afterSignOutUrl="/"
 									appearance={{
 										elements: {
 											userButtonAvatarBox: "size-6",

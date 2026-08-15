@@ -5,8 +5,9 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { revalidatePath } from "next/cache";
 
-export async function PATCH(req: Request, { params }: { params: { channelId: string } }) {
-	try {
+export async function PATCH(req: Request, props: { params: Promise<{ channelId: string }> }) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
 		const { searchParams } = new URL(req.url);
 		const serverId = searchParams.get("serverId");
@@ -65,8 +66,9 @@ export async function PATCH(req: Request, { params }: { params: { channelId: str
 }
 
 
-export async function DELETE(req: Request,{params}: {params: {channelId: string}}) {
-	try {
+export async function DELETE(req: Request, props: {params: Promise<{channelId: string}>}) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
 		const { searchParams } = new URL(req.url);
 		const serverId = searchParams.get("serverId");

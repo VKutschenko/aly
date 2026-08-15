@@ -10,30 +10,31 @@ import { redirect } from "next/navigation";
 
 
 interface ChannelIdPageProps {
-	params: {
+	params: Promise<{
 		serverId: string;
 		channelId: string;
-	};
+	}>;
 }
 
-export default async function ChannelIdPage({ params }: ChannelIdPageProps) {
-	const profile = await getCurrentProfile();
-	if (!profile) {
-		return auth().redirectToSignIn();
+export default async function ChannelIdPage(props: ChannelIdPageProps) {
+    const params = await props.params;
+    const profile = await getCurrentProfile();
+    if (!profile) {
+		return (await auth()).redirectToSignIn();
 	}
 
 
-	const channel = await getChannel(params.channelId);
-	const member = await getMember(params.serverId, profile.id);
+    const channel = await getChannel(params.channelId);
+    const member = await getMember(params.serverId, profile.id);
 
-	if (!channel || !member) {
+    if (!channel || !member) {
 		return redirect("/");
 	}
-	return (
+    return (
 		<div
 			className={cn(
 				"bg-white dark:bg-[#313338] flex flex-col h-full",
-				"overflow-hidden" && (channel.type === ChannelType.VIDEO || channel.type === ChannelType.AUDIO)
+				(channel.type === ChannelType.VIDEO || channel.type === ChannelType.AUDIO) && "overflow-hidden"
 			)}
 		>
 			<ChatHeader name={channel?.name} serverId={channel?.serverId} type="channel" />

@@ -18,33 +18,35 @@ export const metadata: Metadata = {
 
 
 interface MemberIdPageProps {
-	params: {
+	params: Promise<{
 		serverId: string;
 		memberId: string;
-	};
-	searchParams: {
+	}>;
+	searchParams: Promise<{
 		video?: boolean;
-	};
+	}>;
 }
 
-export default async function MemberIdPage({ params, searchParams }: MemberIdPageProps) {
-	const profile = await getCurrentProfile();
-	if (!profile) {
-		return auth().redirectToSignIn();
+export default async function MemberIdPage(props: MemberIdPageProps) {
+    const searchParams = await props.searchParams;
+    const params = await props.params;
+    const profile = await getCurrentProfile();
+    if (!profile) {
+		return (await auth()).redirectToSignIn();
 	}
 
-	const currentMember = await getCurrentMember(params?.serverId, profile?.id);
-	if (!currentMember) {
+    const currentMember = await getCurrentMember(params?.serverId, profile?.id);
+    if (!currentMember) {
 		return redirect("/");
 	}
-	const conversation = await getOrCreateConversation(currentMember?.id, params?.memberId);
-	if (!conversation) {
+    const conversation = await getOrCreateConversation(currentMember?.id, params?.memberId);
+    if (!conversation) {
 		return redirect(`/servers/${params.serverId}`);
 	}
-	const { memberOne, memberTwo } = conversation;
-	const otherMember = memberOne.profileId === profile?.id ? memberTwo : memberOne;
+    const { memberOne, memberTwo } = conversation;
+    const otherMember = memberOne.profileId === profile?.id ? memberTwo : memberOne;
 
-	return (
+    return (
 		<div className="bg-white dark:bg-[#313338] flex flex-col h-full">
 			<ChatHeader
 				name={otherMember.profile.name}

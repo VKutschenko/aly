@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { revalidatePath } from "next/cache";
 
-export async function PATCH(req: NextRequest, { params }: { params: { serverId: string } }) {
-	try {
+export async function PATCH(req: NextRequest, props: { params: Promise<{ serverId: string }> }) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
 		if (!profile) {
 			return new NextResponse("Unauthorized", { status: 401 });
@@ -34,8 +35,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { serverId: 
 	}
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { serverId: string } }) {
-	try {
+export async function DELETE(req: NextRequest, props: { params: Promise<{ serverId: string }> }) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
 		if (!profile) {
 			return new NextResponse("Unauthorized", { status: 401 });

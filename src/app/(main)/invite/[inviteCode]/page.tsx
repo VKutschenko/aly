@@ -3,21 +3,22 @@ import { getCurrentProfile, getServerByInviteCode } from "@/lib/query";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export default async function InviteCodePage({ params }: { params: { inviteCode: string } }) {
-	const profile = await getCurrentProfile();
-	if (!profile) {
-		return auth().redirectToSignIn();
+export default async function InviteCodePage(props: { params: Promise<{ inviteCode: string }> }) {
+    const params = await props.params;
+    const profile = await getCurrentProfile();
+    if (!profile) {
+		return (await auth()).redirectToSignIn();
 	}
-	if (!params.inviteCode) {
+    if (!params.inviteCode) {
 		return redirect("/");
 	}
-	const existingServer = await getServerByInviteCode(params.inviteCode, profile.id);
+    const existingServer = await getServerByInviteCode(params.inviteCode, profile.id);
 
-	if (existingServer) {
+    if (existingServer) {
 		return redirect(`/servers/${existingServer.id}`);
 	}
 
-	const server = await prisma.server.update({
+    const server = await prisma.server.update({
 		where: {
 			inviteCode: params.inviteCode,
 		},
@@ -32,8 +33,8 @@ export default async function InviteCodePage({ params }: { params: { inviteCode:
 		},
 	});
 
-	if (server) {
+    if (server) {
 		return redirect(`/servers/${server.id}`);
 	}
-	return <div>page</div>;
+    return <div>page</div>;
 }

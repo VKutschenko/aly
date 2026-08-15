@@ -4,10 +4,16 @@ import { getCurrentProfile, getServer } from "@/lib/query";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export default async function ServerIdLayout({children,params}: {children: React.ReactNode , params: {serverId: string}}) {
+export default async function ServerIdLayout(props: {children: React.ReactNode , params: Promise<{serverId: string}>}) {
+    const params = await props.params;
+
+    const {
+        children
+    } = props;
+
     const profile = await getCurrentProfile();
     if (!profile) {
-        return auth().redirectToSignIn();
+        return (await auth()).redirectToSignIn();
     }
     const server = await getServer(params.serverId, profile.id);
     if (!server) {

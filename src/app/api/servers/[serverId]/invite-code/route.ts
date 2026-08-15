@@ -4,8 +4,9 @@ import { MemberRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
-export async function PATCH(req: Request ,{params} : {params : {serverId : string}}) {
-	try {
+export async function PATCH(req: Request, props: {params : Promise<{serverId : string}>}) {
+    const params = await props.params;
+    try {
 		const profile = await getCurrentProfile();
 		if (!profile) {
 			return new NextResponse("Unauthorized", { status: 401 });
