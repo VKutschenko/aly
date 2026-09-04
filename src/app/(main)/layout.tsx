@@ -2,9 +2,8 @@ import { SideBar } from "@/components/layout/side-bar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Discord Clone",
-	description:
-		"A Full-Featured Real Time (Video , Audio , Chat) Application",
+	title: "Nosso Espaço",
+	description: "Nosso cantinho privado para conversar, compartilhar e estar juntos.",
 	openGraph: {
 		type: "website",
 	},
@@ -19,4 +18,3 @@ export default async function Layout({ children }: { children: React.ReactNode }
 			<main className="h-full md:pl-[72px]">{children}</main>
 		</section>
 	);
-}
