@@ -1,43 +1,31 @@
-
 import { SideBarActions } from "@/components/layout/side-bar-actions";
-import { SideBarItem } from "@/components/layout/side-bar-item";
 import { ModeToggle } from "@/components/mode-toggler";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { getAllServers, getCurrentProfile } from "@/lib/query";
+import { getCurrentProfile } from "@/lib/query";
 import { UserButton } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { Home, Heart } from "lucide-react";
+import Link from "next/link";
 
-
-export  async function SideBar() {
+export async function SideBar() {
 	const profile = await getCurrentProfile();
 	if (!profile) {
 		return redirect("/");
 	}
 
-	const servers = await getAllServers(profile.id);
-
 	return (
-		<div className="flex flex-col space-y-4 items-center h-full text-primary w-full bg-[#E3E5E8] dark:bg-[#1E1F22] py-3">
-			<SideBarActions />
-			<Separator className="h-[2px] bg-zinc-300 dark:bg-zinc-700 rounded-md w-10 mx-auto" />
-			<ScrollArea className="flex-1 w-full">
-				{servers?.map((server) => (
-					<div key={server.id} className="mb-4">
-						<SideBarItem name={server.name} id={server.id} imageUrl={server.imageUrl} />
-					</div>
-				))}
-			</ScrollArea>
-			<div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
-				<ModeToggle />
-				<UserButton
-					appearance={{
-						elements: {
-							avatarBox: "h-[48px] w-[48px]",
-						},
-					}}
-				/>
-			</div>
-		</div>
-	);
-}
+		<div className="flex flex-col space-y-4 items-center h-full text-primary w-full bg-space-sidebar py-3">
+			{/* Logo */}
+			<Link href="/" className="group relative">
+				<div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-space-accent to-space-purple flex items-center justify-center transition-all duration-300 group-hover:rounded-xl group-hover:shadow-lg group-hover:shadow-space-accent/30">
+					<Heart className="w-6 h-6 text-white" />
+				</div>
+				<div className="absolute left-14 bg-space-server text-space-text text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+					Nosso Espaço
+				</div>
+			</Link>
+
+			<Separator className="h-[2px] bg-space-border rounded-md w-10 mx-auto" />
+
+			{/* Home */}
+			<Link href="/" className="group 
